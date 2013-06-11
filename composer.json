@@ -1,0 +1,26 @@
+{
+    "name": "joacub/jc-blog",
+    "description": "Modulo blog zf2",
+    "type": "library",
+    "keywords": [
+        "zf2", "navegacion", "navigation", "blog"
+    ],
+    "homepage": "https://github.com/joacub/jc-blog",
+    "authors": [
+        {
+            "name": "Johan",
+            "email": "joacub@gmail.com"
+        }
+    ],
+    "require": {
+        "zendframework/zendframework": "2.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "JcBlog\\": "src/"
+        },
+        "classmap": [
+            "./Module.php"
+        ]
+    }
+}
