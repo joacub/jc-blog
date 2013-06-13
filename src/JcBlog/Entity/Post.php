@@ -31,7 +31,7 @@ class Post
     protected $intro;
 
     /**
-     * @ORM\Column(type="text" nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      * @Form\Options({"label" : "Contenido"})
      */
     protected $content;
