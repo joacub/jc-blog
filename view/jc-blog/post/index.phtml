@@ -1,0 +1,24 @@
+<?php foreach ($this->posts as $post) : ?>
+<div class="post post-<?php echo $post->getId()?>">
+    <h2 class="entry-title">
+        <a href="<?php echo $this->url('JcBlog-post', array('slug' => $post->getSlug()))?>">
+            <?php echo $this->escapeHtml($post->getTitle())?>
+        </a>
+    </h2>
+    <div class="entry-meta">
+        <span class="entry-date">
+            <?php echo strftime($this->config['date-format'], $post->getCreated_at()->getTimestamp())?>
+        </span>
+    </div>
+    <div class="entry-content">
+        <?php echo $this->escapeHtml($post->getIntro())?>
+    </div>
+</div>
+<?php endforeach; ?>
+
+<?php echo $this->paginationControl(
+    $this->posts,
+    'Elastic',
+    'jc-blog/pagination',
+    ['route' => 'JcBlog']
+) ?>

@@ -45,11 +45,13 @@ class PostController extends AbstractActionController
 
         for ($i = 0; $i < 100; $i++) {
             $post = new Post();
-            $post->title = 'Post ' . uniqid();
-            $post->intro = str_repeat('intro', rand(1, 100));
+            $post->setTitle('Post ' . uniqid());
+            $post->setIntro(str_repeat('intro ', rand(1, 100)));
+            $content = '';
             for ($j = mt_rand(1, 100); $j > 0; $j--) {
-                $post->content .= str_repeat('lorem ipsum ', rand(1, 20));
+                $content .= str_repeat('lorem ipsum ', rand(1, 20));
             }
+            $post->setContent($content);
             $em->persist($post);
         }
         $em->flush();

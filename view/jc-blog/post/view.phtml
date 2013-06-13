@@ -1,0 +1,11 @@
+<div id="post-<?php echo $this->post->getId()?>" class="post">
+    <h1 class="entry-title"><?php echo $this->escapeHtml($this->post->getTitle())?></h1>
+    <div class="entry-meta">
+        <span class="entry-date">
+            <?php echo strftime($this->config['date-format'], $post->getCreated_at()->getTimestamp())?>
+        </span>
+    </div>
+    <div class="entry-content">
+        <?php echo $this->escapeHtml($post->getContent())?>
+    </div>
+</div>
