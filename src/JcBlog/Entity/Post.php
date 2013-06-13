@@ -25,13 +25,13 @@ class Post
     protected $title;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      * @Form\Options({"label" : "Introducción"})
      */
     protected $intro;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text" nullable=true)
      * @Form\Options({"label" : "Contenido"})
      */
     protected $content;
