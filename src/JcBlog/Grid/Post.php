@@ -40,5 +40,8 @@ class Post extends DataGrid
         ->addFilter(new SqlFilter\Like())
         ->setSortable(true);
         
+        $content = $this->getColumn('content');
+        $content->getFormElement()->setOptions(array('ckeditor' => array()) + $content->getFormElement()->getOptions());
+        
    }
 }

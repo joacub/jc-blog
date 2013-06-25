@@ -8,17 +8,16 @@
 
 namespace JcBlog\Collector;
 
-use Serializable;
 use Zend\Mvc\MvcEvent;
-use JcNavigation\Collector\CollectorInterface;
 use Doctrine\ORM\EntityManager;
+use JcNavigation\Collector\AbstractEntityCollector;
 
 /**
  * Role collector - collects the role during dispatch
  *
  * @author Johan Rodriguez <joacub@gmail.com>
  */
-class MenuCollector implements CollectorInterface, Serializable
+class MenuCollector extends AbstractEntityCollector
 {
     const NAME     = 'jc_blog_pages_collector';
     
