@@ -29,6 +29,6 @@ class MenuCollectorServiceFactory implements FactoryInterface
         /* @var $identityProvider \BjyAuthorize\Provider\Identity\ProviderInterface */
         $em = $serviceLocator->get('Doctrine\ORM\EntityManager');
 
-        return new MenuCollector($em);
+        return new MenuCollector($em, $serviceLocator->get('Config')['JcBlog']);
     }
 }

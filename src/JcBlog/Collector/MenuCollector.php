@@ -23,8 +23,6 @@ class MenuCollector extends AbstractEntityCollector
     
     const PRIORITY = 150;
     
-    const ENTITY   = 'JcBlog\Entity\Post';
-    
     const ROUTER   = 'JcBlog-post';
 
     /**
@@ -37,9 +35,12 @@ class MenuCollector extends AbstractEntityCollector
      */
     protected $em;
     
-    public function __construct(EntityManager $em)
+    protected $options;
+    
+    public function __construct(EntityManager $em, $options)
     {
     	$this->em = $em;
+    	$this->options = $options;
     }
 
     /**
@@ -68,7 +69,7 @@ class MenuCollector extends AbstractEntityCollector
         }
 
         $posts = $this->em
-        ->getRepository('JcBlog\Entity\Post')
+        ->getRepository($this->options['entity_class'])
         ->findAll();
 
         foreach ($posts as $post) {
@@ -83,7 +84,7 @@ class MenuCollector extends AbstractEntityCollector
      */
     public function getEntity()
     {
-    	return static::ENTITY;
+    	return $this->options['entity_class'];
     }
     
     /**

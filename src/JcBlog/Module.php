@@ -13,6 +13,21 @@ class Module implements ModuleManager\Feature\AutoloaderProviderInterface,
                         ModuleManager\Feature\ConfigProviderInterface,
                         ServiceProviderInterface
 {
+    
+    public function onBootstrap($e)
+    {
+        $app     = $e->getParam('application');
+        $sm      = $app->getServiceManager();
+        $config  = $sm->get('Config');
+        	
+        // Add the default entity driver only if specified in configuration
+        if ($config['JcBlog']['enable_default_entities']) {
+            $chain = $sm->get('doctrine.driver.orm_default');
+            $chain->addDriver(new XmlDriver(__DIR__ . '/../../config/xml/jcblogdoctrine'), 'JcBlog\Entity\ByDefault');
+        }
+    
+    }
+    
     public function getAutoloaderConfig()
     {
         return array(
@@ -39,21 +54,10 @@ class Module implements ModuleManager\Feature\AutoloaderProviderInterface,
     			'jcblog_grid_datasource' => function ($sm) {
     			    $config = $sm->get('Config');
     			    
-    			    // Add the default entity driver only if specified in configuration
-    			    if ($config['JcBlog']['enable_default_entities']) {
-    			        $chain = $sm->get('doctrine.driver.orm_default');
-    			        $chain->addDriver(new XmlDriver(__DIR__ . '/../../config/xml/jcblogdoctrine'), 'JcBlog\Entity\ByDefault');
-    			    }
-    			    
-    			    try {
     				$dataSource = new DoctrineDbTableGateway(array(
     					'entity' => $config['JcBlog']['entity_class'],
     					'em' => $sm->get('jcblog_doctrine_em'),
     				));
-    			    } catch(\Exception $e) {
-    			    	echo $e->getMessage();
-    			    	exit;
-    			    }
     				return $dataSource;
     			},
     			'jcblog_grid_renderer' => function (\Zend\ServiceManager\ServiceManager $sm) {

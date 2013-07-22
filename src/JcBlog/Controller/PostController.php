@@ -2,7 +2,6 @@
 namespace JcBlog\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use JcBlog\Entity\Post;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator;
@@ -13,7 +12,7 @@ class PostController extends AbstractActionController
     {
         $em = $this->getEntityManager();
 
-        $query = $em->createQuery('SELECT p FROM JcBlog\Entity\Post p ORDER BY p.created_at DESC, p.id DESC');
+        $query = $em->createQuery('SELECT p FROM '.$this->getConfig()['entity_class'].' p ORDER BY p.created_at DESC, p.id DESC');
 
         $paginator = new Paginator(
             new DoctrinePaginator(new ORMPaginator($query))
@@ -29,7 +28,7 @@ class PostController extends AbstractActionController
         $slug = $this->params()->fromRoute('slug');
 
         $post = $this->getEntityManager()
-                     ->getRepository('JcBlog\Entity\Post')
+                     ->getRepository($this->getConfig()['entity_class'])
                      ->findOneBy(array('slug' => $slug))
         ;
 
