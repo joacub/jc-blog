@@ -1,13 +1,12 @@
 <?php
-namespace JcBlog\Entity;
+namespace JcBlog\Entity\Super;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as ORMExt;
 use Zend\Form\Annotation as Form;
 
 /**
- * @ORM\Entity
- * @ORM\Table(name="post")
+ * @ORM\MappedSuperclass
  */
 class Post
 {

@@ -3,24 +3,24 @@ namespace JcBlog;
 return array(
 	'JcBlog' => array(
 		'posts-per-page' => 10,
-		'date-format' => '%e %b %Y'
+		'date-format' => '%e %b %Y',
+	    'entity_class' => 'JcBlog\Entity\ByDefault\Post',
+	    'enable_default_entities' => true,
 	),
-	'doctrine' => array(
-		'driver' => array(
-			'JcBlog_entities' => array(
-				'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-				'cache' => 'array',
-				'paths' => array(
-					__DIR__ . '/../src/' . __NAMESPACE__ . '/Entity'
-				)
-			),
-			'orm_default' => array(
-				'drivers' => array(
-					__NAMESPACE__ . '\Entity' => 'JcBlog_entities'
-				)
-			)
-		)
-	),
+    'doctrine' => array(
+        'driver' => array(
+            'JcBlog_entities' => array(
+                'class' => 'Doctrine\ORM\Mapping\Driver\XmlDriver',
+                'paths' => __DIR__ . '/xml/jcblog'
+            ),
+    
+            'orm_default' => array(
+                'drivers' => array(
+                    'JcBlog\Entity\Super'  => 'JcBlog_entities'
+                )
+            )
+        )
+    ),
 	'router' => array(
 		'routes' => array(
 			'zfcadmin' => array(

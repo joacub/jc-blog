@@ -7,6 +7,7 @@ use AtDataGrid\DataGrid\DataSource\DoctrineDbTableGateway;
 use AtDataGrid\DataGrid\Renderer\Html;
 use AtDataGrid\DataGrid\Manager;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
+use Doctrine\ORM\Mapping\Driver\XmlDriver;
 
 class Module implements ModuleManager\Feature\AutoloaderProviderInterface,
                         ModuleManager\Feature\ConfigProviderInterface,
@@ -36,10 +37,23 @@ class Module implements ModuleManager\Feature\AutoloaderProviderInterface,
     	return array(
     		'factories' => array(
     			'jcblog_grid_datasource' => function ($sm) {
+    			    $config = $sm->get('Config');
+    			    
+    			    // Add the default entity driver only if specified in configuration
+    			    if ($config['JcBlog']['enable_default_entities']) {
+    			        $chain = $sm->get('doctrine.driver.orm_default');
+    			        $chain->addDriver(new XmlDriver(__DIR__ . '/../../config/xml/jcblogdoctrine'), 'JcBlog\Entity\ByDefault');
+    			    }
+    			    
+    			    try {
     				$dataSource = new DoctrineDbTableGateway(array(
-    					'entity' => 'JcBlog\Entity\Post',
+    					'entity' => $config['JcBlog']['entity_class'],
     					'em' => $sm->get('jcblog_doctrine_em'),
     				));
+    			    } catch(\Exception $e) {
+    			    	echo $e->getMessage();
+    			    	exit;
+    			    }
     				return $dataSource;
     			},
     			'jcblog_grid_renderer' => function (\Zend\ServiceManager\ServiceManager $sm) {

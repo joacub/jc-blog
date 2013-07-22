@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <mapped-superclass name="JcBlog\Entity\Super\Post" table="user">
+
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO" />
+        </id>
+
+        <field name="title" type="string" length="255" unique="false" nullable="false" />
+        <field name="intro" type="string" unique="false" length="255" nullable="true"/>
+        <field name="content" type="text" nullable="true" />
+        <field name="slug" type="string" unique="true">
+        	<gedmo:slug unique="true" style="camel" updatable="true" separator="-" fields="title" />
+        </field>
+        <field name="created_at" type="datetime" nullable="true" >
+        	<gedmo:timestampable on="create"/>
+        </field>
+        <field name="updated_at" type="datetime" nullable="true">
+        	<gedmo:timestampable on="update"/>
+        </field>
+
+    </mapped-superclass>
+
+</doctrine-mapping>
