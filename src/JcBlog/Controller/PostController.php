@@ -8,31 +8,53 @@ use Zend\Paginator\Paginator;
 
 class PostController extends AbstractActionController
 {
+
     public function indexAction()
     {
         $em = $this->getEntityManager();
-
-        $query = $em->createQuery('SELECT p FROM '.$this->getConfig()['entity_class'].' p ORDER BY p.created_at DESC, p.id DESC');
-
-        $paginator = new Paginator(
-            new DoctrinePaginator(new ORMPaginator($query))
-        );
-        $paginator->setCurrentPageNumber($this->params()->fromRoute('page'));
+        
+        $query = $em->createQuery('SELECT p FROM ' . $this->getConfig()['entity_class'] . ' p ORDER BY p.created_at DESC, p.id DESC');
+        
+        $paginator = new Paginator(new DoctrinePaginator(new ORMPaginator($query)));
+        $paginator->setCurrentPageNumber($this->params()
+            ->fromRoute('page'));
         $paginator->setItemCountPerPage($this->getConfig('posts-per-page'));
-
-        return array('posts' => $paginator, 'config' => $this->getConfig());
+        
+        return array(
+            'posts' => $paginator,
+            'config' => $this->getConfig()
+        );
     }
 
     public function viewAction()
     {
         $slug = $this->params()->fromRoute('slug');
-
+        
         $post = $this->getEntityManager()
-                     ->getRepository($this->getConfig()['entity_class'])
-                     ->findOneBy(array('slug' => $slug))
-        ;
-
-        return array('post' => $post, 'config' => $this->getConfig());
+            ->getRepository($this->getConfig()['entity_class'])
+            ->findOneBy(array(
+            'slug' => $slug
+        ));
+        
+        if (! $post) {
+            $post = $this->getEntityManager()
+                ->getRepository('Gedmo\\Translatable\\Entity\\Translation')
+                ->findOneBy(array(
+                'field' => 'slug',
+                'content' => $slug,
+                'objectClass' => $this->getConfig()['entity_class']
+            ));
+            $post = $this->getEntityManager()
+                ->getRepository($this->getConfig()['entity_class'])
+                ->findOneBy(array(
+                'id' => $post->getForeignKey()
+            ));
+        }
+        
+        return array(
+            'post' => $post,
+            'config' => $this->getConfig()
+        );
     }
 
     /**
@@ -41,13 +63,13 @@ class PostController extends AbstractActionController
     public function fixturesAction()
     {
         $em = $this->getEntityManager();
-
-        for ($i = 0; $i < 100; $i++) {
+        
+        for ($i = 0; $i < 100; $i ++) {
             $post = new Post();
             $post->setTitle('Post ' . uniqid());
             $post->setIntro(str_repeat('intro ', rand(1, 100)));
             $content = '';
-            for ($j = mt_rand(1, 100); $j > 0; $j--) {
+            for ($j = mt_rand(1, 100); $j > 0; $j --) {
                 $content .= str_repeat('lorem ipsum ', rand(1, 20));
             }
             $post->setContent($content);
@@ -57,6 +79,7 @@ class PostController extends AbstractActionController
     }
 
     /**
+     *
      * @return \Doctrine\ORM\EntityManager
      */
     protected function getEntityManager()
