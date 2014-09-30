@@ -5,7 +5,8 @@ return array(
 		'posts-per-page' => 10,
 		'date-format' => '%e %b %Y',
 		'entity_class' => 'JcBlog\Entity\ByDefault\Post',
-		'enable_default_entities' => true
+		'enable_default_entities' => true,
+	    'entity_translation_class' => 'Gedmo\\Translatable\\Entity\\Translation'
 	),
 	'doctrine' => array(
 		'driver' => array(

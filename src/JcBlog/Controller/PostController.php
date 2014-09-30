@@ -38,12 +38,17 @@ class PostController extends AbstractActionController
         
         if (! $post) {
             $post = $this->getEntityManager()
-                ->getRepository('Gedmo\\Translatable\\Entity\\Translation')
+                ->getRepository($this->getConfig()['entity_translation_class'])
                 ->findOneBy(array(
                 'field' => 'slug',
                 'content' => $slug,
                 'objectClass' => $this->getConfig()['entity_class']
             ));
+
+            if(!$post) {
+                return $this->notFoundAction();
+            }
+
             $post = $this->getEntityManager()
                 ->getRepository($this->getConfig()['entity_class'])
                 ->findOneBy(array(
