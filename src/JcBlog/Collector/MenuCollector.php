@@ -106,7 +106,12 @@ class MenuCollector extends AbstractEntityCollector
     public function getRouterParams($entity)
     {
         try {
-            $slug = $entity->getSlug();
+            if(is_object($entity)) {
+                $slug = $entity->getSlug();
+            } else {
+                $slug = '';
+            }
+
         } catch(\Exception $e) {
             $slug = '';
         }
